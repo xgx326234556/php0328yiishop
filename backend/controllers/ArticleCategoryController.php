@@ -22,7 +22,7 @@ class ArticleCategoryController extends Controller{
      return $this->render('add',['model'=>$model]);
  }
  public function actionIndex(){
-     $models=ArticleCategory::find()->all();
+     $models=ArticleCategory::find()->where(['>','status','-1'])->all();
      return $this->render('index',['models'=>$models]);
  }
  public function actionEdit($id){

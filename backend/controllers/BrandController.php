@@ -37,7 +37,7 @@ class BrandController extends Controller{
       return $this->render('add',['model'=>$model]);
     }
     public function actionIndex(){
-        $models=Brand::find()->all();
+        $models=Brand::find()->where(['>','status','-1'])->all();
         return $this->render('index',['models'=>$models]);
     }
     public function actionEdit($id){
