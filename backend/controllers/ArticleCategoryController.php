@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\models\ArticleCategory;
 use Symfony\Component\Yaml\Tests\A;
+use yii\data\Pagination;
 use yii\web\Controller;
 use yii\web\Request;
 
@@ -22,8 +23,20 @@ class ArticleCategoryController extends Controller{
      return $this->render('add',['model'=>$model]);
  }
  public function actionIndex(){
-     $models=ArticleCategory::find()->where(['>','status','-1'])->all();
-     return $this->render('index',['models'=>$models]);
+     //按条件查询
+     $query=ArticleCategory::find()->where(['>','status','-1']);
+     //查询总条数
+     $total=$query->count();
+     //每页显示条数
+     $perPage=2;
+     //分页工具类；
+     $pager=new Pagination([
+         'totalCount'=>$total,
+         'defaultPageSize'=>$perPage
+     ]);
+     $row= $query->limit($pager->limit)->offset($pager->offset)->all();
+
+     return $this->render('index',['models'=>$row,'pager'=>$pager]);
  }
  public function actionEdit($id){
      $model=ArticleCategory::findOne(['id'=>$id]);
