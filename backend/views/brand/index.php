@@ -17,16 +17,16 @@ use yii\helpers\Url;
           <td><?=$model->id?></td>
           <td><?=$model->name?></td>
           <td><?=$model->intro?></td>
-          <td><?=\yii\bootstrap\Html::img($model->logo,['height'=>50])?></td>
-          <td><?=$model->sort?></td>
-          <td><?=\backend\models\Brand::getStatusOptions()[$model->status]?></td>
-          <td>
-              <?=\yii\bootstrap\Html::
-              a('修改',['brand/edit','id'=>$model->id],['class'=>'btn btn-info'])?>
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-              <?=\yii\bootstrap\Html::
-              a('删除',['brand/delete','id'=>$model->id],['class'=>'btn btn-info'])?>
-          </td>
-      </tr>
-    <?php endforeach;?>
+<td><?=\yii\bootstrap\Html::img($model->logo,['height'=>50])?></td>
+<td><?=$model->sort?></td>
+<td><?=\backend\models\Brand::getStatusOptions(false)[$model->status]?></td>
+<td>
+    <?=\yii\bootstrap\Html::
+    a('修改',['brand/edit','id'=>$model->id],['class'=>'btn btn-info'])?>
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <?=\yii\bootstrap\Html::
+    a('删除',['brand/delete','id'=>$model->id],['class'=>'btn btn-info'])?>
+</td>
+</tr>
+<?php endforeach;?>
 </table>

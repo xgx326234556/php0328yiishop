@@ -70,7 +70,8 @@ class BrandController extends Controller{
     }
     public function actionDelete($id){
         $model=Brand::findOne(['id'=>$id]);
-        $model->delete();
+        $model->status=-1;
+        $model->save();
         return $this->redirect(['brand/index']);
     }
 }
