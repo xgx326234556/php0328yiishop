@@ -2,6 +2,7 @@
 use yii\helpers\Url;
 ?>
     <a href="<?=Url::to(['article/add'])?>"class="btn bg-danger">添加</a>
+
     <table class="table table-bordered table-responsive">
         <tr>
             <td>ID</td>

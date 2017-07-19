@@ -32,6 +32,7 @@ class ArticleController extends Controller{
              //根据id为文章详情赋值
             $model2->article_id=$model->id;
             $model2->save();
+            \Yii::$app->session->setFlash('success','添加成功了哦亲');
             return $this->redirect(['article/index']);
          }
      }
@@ -72,6 +73,7 @@ class ArticleController extends Controller{
          if($model2->validate()){
              $model2->article_id=$model->id;
              $model2->save();
+             \Yii::$app->session->setFlash('success','修改成功了哦亲');
              return $this->redirect(['article/index']);
          }
      }
@@ -81,6 +83,7 @@ class ArticleController extends Controller{
      $model=Article::findOne(['id'=>$id]);
      $model->status=-1;
      $model->save();
+     \Yii::$app->session->setFlash('success','删除成功了哦亲');
      return $this->redirect(['article/index']);
  }
     public function actionKan($id){

@@ -1,9 +1,6 @@
 <?php
 namespace backend\controllers;
-
-
 use backend\models\ArticleCategory;
-use Symfony\Component\Yaml\Tests\A;
 use yii\data\Pagination;
 use yii\web\Controller;
 use yii\web\Request;
@@ -17,6 +14,7 @@ class ArticleCategoryController extends Controller{
          $model->load($request->post());
          if($model->validate()){
              $model->save();
+             \Yii::$app->session->setFlash('success','添加成功了哦亲');
              return $this->redirect(['article-category/index']);
          }
      }
@@ -45,6 +43,7 @@ class ArticleCategoryController extends Controller{
          $model->load($request->post());
          if($model->validate()){
              $model->save();
+             \Yii::$app->session->setFlash('success','修改成功了哦亲');
              return $this->redirect(['article-category/index']);
          }
      }
@@ -53,7 +52,9 @@ class ArticleCategoryController extends Controller{
  public function actionDelete($id){
      $model=ArticleCategory::findOne(['id'=>$id]);
      $model->status=-1;
+
      $model->save();
+     \Yii::$app->session->setFlash('success','删除成功了哦亲');
      return $this->redirect(['article-category/index']);
  }
 }

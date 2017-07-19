@@ -33,6 +33,7 @@ class BrandController extends Controller{
                    // $model->logo=$path;
                 //}
                 $model->save();
+                \Yii::$app->session->setFlash('success','添加成功了哦亲');
                 return $this->redirect(['brand/index']);
             }
 
@@ -78,6 +79,7 @@ class BrandController extends Controller{
                    // $model->logo=$path;
                // }
                 $model->save();
+                \Yii::$app->session->setFlash('success','修改成功了哦亲');
                 return $this->redirect(['brand/index']);
             }
 
@@ -88,6 +90,7 @@ class BrandController extends Controller{
         $model=Brand::findOne(['id'=>$id]);
         $model->status=-1;
         $model->save();
+        \Yii::$app->session->setFlash('success','删除成功了哦亲');
         return $this->redirect(['brand/index']);
     }
     public function actions() {
