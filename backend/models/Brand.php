@@ -24,7 +24,8 @@ class Brand extends \yii\db\ActiveRecord implements IdentityInterface{
    {
        return [
            [['name','intro','sort','status'],'required'],
-           ['logoFile','file','extensions'=>['jpg','png','gif']],
+           [['sort','status'],'integer'],
+           [['logo'],'string'],
        ];
    }
    public function attributeLabels()
@@ -34,7 +35,7 @@ class Brand extends \yii\db\ActiveRecord implements IdentityInterface{
            'intro'=>'简介',
            'sort'=>'排序',
            'status'=>'状态',
-           'logoFile'=>'图片',
+           'logo'=>'Logo图片',
        ];
    }
 

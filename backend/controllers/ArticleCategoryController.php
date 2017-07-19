@@ -34,7 +34,7 @@ class ArticleCategoryController extends Controller{
          'totalCount'=>$total,
          'defaultPageSize'=>$perPage
      ]);
-     $row= $query->limit($pager->limit)->offset($pager->offset)->all();
+     $row= $query->limit($pager->limit)->offset($pager->offset)->orderBy('sort desc')->all();
 
      return $this->render('index',['models'=>$row,'pager'=>$pager]);
  }
