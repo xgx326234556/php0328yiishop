@@ -38,9 +38,9 @@ class ArticleController extends Controller{
      }
      return $this->render('add',['model'=>$model,'row'=>$row,'model2'=>$model2]);
  }
- public function actionIndex(){
+ public function actionIndex($keyword=''){
 
-   $query=Article::find()->where(['>','status','-1']);
+   $query=Article::find()->where(['and','status>-1',"name like '%{$keyword}%'"]);
    //查询总条数
    $total=$query->count();
    //每页显示条数
@@ -90,5 +90,14 @@ class ArticleController extends Controller{
         $model=ArticleDetail::findOne(['article_id'=>$id]);
         $models=Article::findOne(['id'=>$id]);
         return $this->render('kan',['model'=>$model,'models'=>$models]);
+    }
+    //编辑器配置
+    public function actions()
+    {
+        return [
+            'upload' => [
+                'class' => 'kucha\ueditor\UEditorAction',
+            ]
+        ];
     }
 }

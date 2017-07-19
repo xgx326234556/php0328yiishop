@@ -1,6 +1,10 @@
 <?php
 use yii\helpers\Url;
 ?>
+    <form action="" method="get">
+        <input  type="text" name="keyword" class="btn-group-sm"/>
+        <input  type="submit" value="搜索" class="btn btn-danger"/>
+    </form>
     <a href="<?=Url::to(['article/add'])?>"class="btn bg-danger">添加</a>
 
     <table class="table table-bordered table-responsive">

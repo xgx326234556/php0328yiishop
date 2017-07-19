@@ -1,6 +1,5 @@
 <?php
 namespace backend\controllers;
-use backend\models\ArticleDetail;
 use backend\models\Brand;
 use flyok666\uploadifive\UploadAction;
 use yii\data\Pagination;
@@ -40,9 +39,9 @@ class BrandController extends Controller{
         }
       return $this->render('add',['model'=>$model]);
     }
-    public function actionIndex(){
+    public function actionIndex($keyword=''){
         //按条件查询
-        $query=Brand::find()->where(['>','status','-1']);
+        $query=Brand::find()->where(['and','status>-1',"name like '%{$keyword}%'"]);
         //查询出总条数
         $total=$query->count();
         //每页显示条数

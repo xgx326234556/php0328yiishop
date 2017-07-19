@@ -20,9 +20,9 @@ class ArticleCategoryController extends Controller{
      }
      return $this->render('add',['model'=>$model]);
  }
- public function actionIndex(){
+ public function actionIndex($keyword=''){
      //按条件查询
-     $query=ArticleCategory::find()->where(['>','status','-1']);
+     $query=ArticleCategory::find()->where(['and','status>-1',"name like '%{$keyword}%'"]);
      //查询总条数
      $total=$query->count();
      //每页显示条数
