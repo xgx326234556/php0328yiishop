@@ -1,10 +1,11 @@
 <?php
 use yii\helpers\Url;
 ?>
-    <form action="" method="get">
-        <input  type="text" name="keyword" class="btn-group-sm"/>
+    <form action="" method="get" style="float: right">
+        <input  type="text" name="keyword" class="btn-group-sm" placeholder="请输入搜索内容"/>
         <input  type="submit" value="搜索" class="btn btn-danger"/>
     </form>
+    <a href="<?=Url::to(['article/recovery'])?>"class="btn bg-danger">回收站</a>
     <a href="<?=Url::to(['article/add'])?>"class="btn bg-danger">添加</a>
 
     <table class="table table-bordered table-responsive">
@@ -43,7 +44,6 @@ use yii\helpers\Url;
         <?php endforeach;?>
     </table>
 <?php
-echo \yii\widgets\LinkPager::widget(['pagination'=>$pager,
-    'nextPageLabel'=>'下一页','prevPageLabel'=>'上一页','firstPageLabel'=>'首页']);
+echo \yii\widgets\LinkPager::widget(['pagination'=>$pager,'nextPageLabel'=>'下一页','prevPageLabel'=>'上一页','firstPageLabel'=>'首页']);
 
-?>
+

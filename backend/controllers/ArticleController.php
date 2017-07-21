@@ -97,7 +97,26 @@ class ArticleController extends Controller{
         return [
             'upload' => [
                 'class' => 'kucha\ueditor\UEditorAction',
+                'config' => [
+                   "imageUrlPrefix"  => "http://admin.yiishop.com",//图片访问路径前缀
+                    "imagePathFormat" => "/upload/image/{yyyy}{mm}{dd}/{time}{rand:6}", //上传保存路径
+                "imageRoot" => \Yii::getAlias("@webroot"),
             ]
-        ];
+        ]
+
+    ];
+    }
+    public function actionRecovery(){
+        $query=Article::find()->where(['=','status','-1']);
+        $total=$query->count();
+        $perPage=2;
+        $pager=new Pagination([
+            'totalCount'=>$total,
+            'defaultPageSize'=>$perPage
+
+        ]);
+        $models=$query->limit($pager->limit)->offset($pager->offset)->orderBy('sort desc')->all();
+        return $this->render('recovery',['models'=>$models,'pager'=>$pager]);
+
     }
 }
