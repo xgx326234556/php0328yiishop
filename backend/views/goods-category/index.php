@@ -1,10 +1,10 @@
 <?php
 use yii\helpers\Url;
 ?>
-    <!--<form action="" method="get">
+    <form action="<?=Url::to(['goods-category/index'])?>" method="get" style="float: right">
         <input  type="text" name="keyword" class="btn-group-sm"/>
         <input  type="submit" value="搜索" class="btn btn-danger"/>
-    </form>-->
+    </form>
     <a href="<?=Url::to(['goods-category/add'])?>"class="btn bg-danger">添加</a>
     <table class="table table-bordered table-responsive">
         <tr>
@@ -17,7 +17,7 @@ use yii\helpers\Url;
         <?php foreach($models as $model) :?>
             <tr>
                 <td><?=$model->id?></td>
-                <td><?=$model->name?></td>
+                <td><?=str_repeat('__',$model->depth).$model->name?></td>
                 <td><?=\backend\models\GoodsCategory::getcategory($model->parent_id)?></td>
                 <td><?=$model->intro?></td>
                 <td>

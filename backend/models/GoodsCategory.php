@@ -84,4 +84,12 @@ class GoodsCategory extends yii\db\ActiveRecord implements IdentityInterface
             return $model;
         }
     }
+    public static function exceptionInfo($msg)
+    {
+        $infos = [
+
+            'Can not move a node when the target node is child.'=>'不能修改到自己的子孙节点下面',
+        ];
+        return isset($infos[$msg])?$infos[$msg]:$msg;
+    }
 }
