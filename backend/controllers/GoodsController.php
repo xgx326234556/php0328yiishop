@@ -20,7 +20,7 @@ class GoodsController extends Controller{
       $models=new GoodsIntro();//商品内容表模型
       $modelry=new GoodsGallery();//商品相册表单模型
       $categoryes=GoodsCategory::find()->select(['id','parent_id','name'])->asArray()->all();
-      $brand=Brand::find()->all();
+      $brand=Brand::find()->all();//获取品牌分类模型
       $request=new Request();
       if($request->isPost){
           /*$model3->load($request->post());
@@ -46,7 +46,7 @@ class GoodsController extends Controller{
 
               }else{
                   $model3=new GoodsDayCount();
-                  $a=1000001;
+                  $a=1000000001;
                   $model->sn=date('Ymd').$a;
                   $model3->day=date('Ymd');
                   $model3->count=$a;
@@ -119,11 +119,22 @@ class GoodsController extends Controller{
                 'beforeSave' => function (UploadAction $action) {},
                 'afterSave' => function (UploadAction $action) {
                     //返回图片路径
-                   $action->output['fileUrl'] = $action->getWebUrl();//输出文件的相对路径
+                    $goods_id = \Yii::$app->request->post('goods_id');
+                    if($goods_id){
+                        $model = new GoodsGallery();
+                        $model->goods_id = $goods_id;
+                        $model->path = $action->getWebUrl();
+                        $model->save();
+                        $action->output['fileUrl'] = $model->path;
+                        $action->output['id'] = $model->id;
+                    }else{
+                        $action->output['fileUrl'] = $action->getWebUrl();//输出文件的相对路径
+                    }
+                  // $action->output['fileUrl'] = $action->getWebUrl();//输出文件的相对路径
                     //实列话七牛云的类需要传配置文件
-                   $action->getFilename();
-                    $action->getWebUrl();
-                    $action->getSavePath();
+                   //$action->getFilename();
+                   // $action->getWebUrl();
+                    //$action->getSavePath();
 
                     /*$qiniu = new Qiniu(\Yii::$app->params['qiniu']);
 
@@ -272,30 +283,38 @@ class GoodsController extends Controller{
         if($request->isPost){
             $model->load($request->post());
             if($model->validate()){
+                //var_dump($model->path);
+                //exit;
               $models->path=$model->path;
               $models->save();
                 \Yii::$app->session->setFlash('success','添加成功了哦亲');
                 return $this->redirect(['goods/index']);
             }
         }
-        return $this->render('photo',['model'=>$model]);
+        return $this->render('photo',['model'=>$model,'goods'=>$models]);
 
     }
     public function actionPhotos($id){
-        $model=GoodsGallery::findOne(['goods_id'=>$id]);
+
+        $model=GoodsGallery::find()->where(['goods_id'=>$id])->all();
+
+        //$models=Goods::findOne(['id'=>$id]);
         if(!$model){
            echo '没有相册图片为空';?>
 
             <a href="<?=Url::to(['goods/index'])?>"class="btn bg-danger">回到展示页面</a>
+
            <?php
 
         }else{
 
-            return $this->render('photos',['model'=>$model]);
+
+
+            return $this->render('photos',['models'=>$model,'idd'=>$id]);
         }
            return false;
     }
-    public function actionPhotoEdit($id){
+   /* public function actionPhotoEdit($id){
 
         $model=GoodsGallery::findOne(['goods_id'=>$id]);
         $request=new Request();
@@ -309,15 +328,21 @@ class GoodsController extends Controller{
             }
         }
        //保存
-        return $this->render('photo',['model'=>$model]);
+        return $this->render('photo',['model'=>$model,'goods'=>$model]);
 
-    }
+    }*/
     public function actionPhotoDelete($id){
-        $model=GoodsGallery::findOne(['goods_id'=>$id]);
-        $model->delete();
-        \Yii::$app->session->setFlash('success','删除成功了哦亲');
-        return $this->redirect(['goods/index']);
+        $model=GoodsGallery::findOne(['id'=>$id]);
+        $count=GoodsGallery::find()->where(['goods_id'=>$model->goods_id])->count();
+       if($count==1){
 
+           \Yii::$app->session->setFlash('success','商品必须保留一张图片说明');
+           return $this->redirect(['goods/photos','id'=>$model->goods_id]);
+       }else{
+           $model->delete();
+           \Yii::$app->session->setFlash('success','删除成功了哦亲');
+           return $this->redirect(['goods/photos','id'=>$model->goods_id]);
+       }
 
     }
 }

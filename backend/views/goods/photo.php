@@ -10,7 +10,8 @@ echo \flyok666\uploadifive\Uploadifive::widget([
     'csrf' => true,
     'renderTag' => false,
     'jsOptions' => [
-        'formData'=>['someKey' => 'someValue'],
+        //'formData'=>['someKey' => 'someValue'],
+        'formData'=>['goods_id'=>$goods->goods_id],
         'width' => 50,
         'height' => 40,
         'onError' => new JsExpression(<<<EOF
@@ -32,6 +33,8 @@ function(file, data, response) {
     } else {
         console.log(data.fileUrl);
         //将图片的地址赋值给path字段
+        //var html = '<input type="text" value="'+data.fileUrl+'"/>';
+       	//$('html').appendTo($('#box'));
         $("#goodsgallery-path").val(data.fileUrl);
         //将上传成功的图片回显
         $("#img").attr('src',data.fileUrl);
@@ -45,3 +48,5 @@ EOF
 echo \yii\bootstrap\Html::img($model->path?$model->path:false,['id'=>'img','height'=>50]).'<br/>';
 echo \yii\bootstrap\Html::submitButton('提交',['class'=>'btn btn-info']);
 \yii\bootstrap\ActiveForm::end();
+?>
+
