@@ -14,6 +14,9 @@ use yii\web\Request;
 use yii;
 use yii\helpers\Url;
 
+
+use yii\web\NotFoundHttpException;
+
 class GoodsController extends Controller{
   public function actionAdd(){
       $model=new Goods();//商品表模型
@@ -23,13 +26,7 @@ class GoodsController extends Controller{
       $brand=Brand::find()->all();//获取品牌分类模型
       $request=new Request();
       if($request->isPost){
-          /*$model3->load($request->post());
-          if($model3->validate()){
-              $a=0;
-              $model3->day=date('Ymd');
-              $model3->count=++$a;
-              $model3->save();
-          }*/
+
           $model->load($request->post());
 
           if($model->validate()){
@@ -63,13 +60,33 @@ class GoodsController extends Controller{
               $models->goods_id=$model->id;
               $models->save();
               \Yii::$app->session->setFlash('success','添加相册哦亲');
-              return $this->redirect(['goods/photo','id'=>$model->id]);
+              return $this->redirect(['goods/gallery','id'=>$model->id]);
           }
 
       }
       return $this->render('add',
           ['model'=>$model,'models'=>$models,'categoryes'=>$categoryes,'brand'=>$brand]);
   }
+    public function actionGallery($id)
+    {
+        $goods = Goods::findOne(['id'=>$id]);
+        if($goods == null){
+            throw new NotFoundHttpException('商品不存在');
+        }
+
+        return $this->render('gallery',['goods'=>$goods]);
+
+    }
+    public function actionDelGallery(){
+        $id = \Yii::$app->request->post('id');
+        $model = GoodsGallery::findOne(['id'=>$id]);
+        if($model && $model->delete()){
+            return 'success';
+        }else{
+            return 'fail';
+        }
+
+    }
     public function actions() {
         //接收上传的图片
         return [
@@ -82,19 +99,9 @@ class GoodsController extends Controller{
                 //跨站请求
                 'enableCsrf' => true, // default
                 'postFieldName' => 'Filedata', // default
-                //BEGIN METHOD
-                //'format' => [$this, 'methodName'],
-                //END METHOD
-                //BEGIN CLOSURE BY-HASH
+
                 'overwriteIfExist' => true,//如果文件已存在，是否覆盖
-                /* 'format' => function (UploadAction $action) {
-                     $fileext = $action->uploadfile->getExtension();
-                     $filename = sha1_file($action->uploadfile->tempName);
-                     return "{$filename}.{$fileext}";
-                 },*/
-                //END CLOSURE BY-HASH
-                //BEGIN CLOSURE BY TIME
-                //文件的保存方式
+
                 'format' => function (UploadAction $action) {
                     //获取图片上传字段名
                     $fileext = $action->uploadfile->getExtension();
@@ -130,22 +137,7 @@ class GoodsController extends Controller{
                     }else{
                         $action->output['fileUrl'] = $action->getWebUrl();//输出文件的相对路径
                     }
-                  // $action->output['fileUrl'] = $action->getWebUrl();//输出文件的相对路径
-                    //实列话七牛云的类需要传配置文件
-                   //$action->getFilename();
-                   // $action->getWebUrl();
-                    //$action->getSavePath();
 
-                    /*$qiniu = new Qiniu(\Yii::$app->params['qiniu']);
-
-                    //调用上传方法两个参数文件上传的路径，文件上传的名称
-                    $qiniu->uploadFile(
-                        $action->getSavePath(), $action->getWebUrl()
-                    );
-                    //拿到七牛云的地址
-                    $url = $qiniu->getLink($action->getWebUrl());
-                    //输出拿到的七牛云地址
-                    $action->output['fileUrl']=$url;*/
                 },
             ],
         ];
@@ -193,36 +185,11 @@ class GoodsController extends Controller{
         $brand=Brand::find()->all();
         $request=new Request();
         if($request->isPost){
-            /*$model3->load($request->post());
-            if($model3->validate()){
-                $a=0;
-                $model3->day=date('Ymd');
-                $model3->count=++$a;
-                $model3->save();
-            }*/
+
             $model->load($request->post());
 
             if($model->validate()){
-                //$model->create_time=date('Ymd');
-                //$model->status=1;
-                //根据今天的时间去查询count表中是否存在
-                //$row=GoodsDayCount::findOne(['day'=>$model->create_time]);
-                /*/if($row){
-                    $count=++$row->count;//获取存在的商品数自加1
-                    $day=date('Ymd');//获取添加时间
-                    $model->sn=$day.$count;//生成货号
-                    $row->count=$count;//将自加1的商品数保存到数据表
-                    $row->updateAttributes(['count']);
 
-                }else{
-                    $model3=new GoodsDayCount();
-                    $a=1000001;
-                    $model->sn=date('Ymd').$a;
-                    $model3->day=date('Ymd');
-                    $model3->count=$a;
-                    $model3->save();
-
-                }*/
 
                 $model->save();
             }
@@ -276,73 +243,17 @@ class GoodsController extends Controller{
         \Yii::$app->session->setFlash('success','彻底删除成功了哦亲');
         return $this->redirect(['goods/recovery']);
     }
-    public function actionPhoto($id){
-        $model=new GoodsGallery();
-        $models=GoodsGallery::findOne(['goods_id'=>$id]);
-        $request=new Request();
-        if($request->isPost){
-            $model->load($request->post());
-            if($model->validate()){
-                //var_dump($model->path);
-                //exit;
-              $models->path=$model->path;
-              $models->save();
-                \Yii::$app->session->setFlash('success','添加成功了哦亲');
-                return $this->redirect(['goods/index']);
-            }
+
+
+
+    public function actionView($id)
+    {
+        $model = Goods::findOne(['id'=>$id]);
+        if($model==null){
+            throw new NotFoundHttpException('商品不存在');
         }
-        return $this->render('photo',['model'=>$model,'goods'=>$models]);
+        return $this->render('view',['model'=>$model]);
 
     }
-    public function actionPhotos($id){
 
-        $model=GoodsGallery::find()->where(['goods_id'=>$id])->all();
-
-        //$models=Goods::findOne(['id'=>$id]);
-        if(!$model){
-           echo '没有相册图片为空';?>
-
-            <a href="<?=Url::to(['goods/index'])?>"class="btn bg-danger">回到展示页面</a>
-
-           <?php
-
-        }else{
-
-
-
-            return $this->render('photos',['models'=>$model,'idd'=>$id]);
-        }
-           return false;
-    }
-   /* public function actionPhotoEdit($id){
-
-        $model=GoodsGallery::findOne(['goods_id'=>$id]);
-        $request=new Request();
-        if($request->isPost){
-            $model->load($request->post());
-            if($model->validate()){
-                $model->save();
-                \Yii::$app->session->setFlash('success','修改成功了哦亲');
-
-                return $this->redirect(['goods/photos','id'=>$id]);
-            }
-        }
-       //保存
-        return $this->render('photo',['model'=>$model,'goods'=>$model]);
-
-    }*/
-    public function actionPhotoDelete($id){
-        $model=GoodsGallery::findOne(['id'=>$id]);
-        $count=GoodsGallery::find()->where(['goods_id'=>$model->goods_id])->count();
-       if($count==1){
-
-           \Yii::$app->session->setFlash('success','商品必须保留一张图片说明');
-           return $this->redirect(['goods/photos','id'=>$model->goods_id]);
-       }else{
-           $model->delete();
-           \Yii::$app->session->setFlash('success','删除成功了哦亲');
-           return $this->redirect(['goods/photos','id'=>$model->goods_id]);
-       }
-
-    }
 }

@@ -28,6 +28,7 @@ use yii\helpers\Url;
             <td>添加时间</td>
             <td>点击数</td>
             <td>查看详情</td>
+            <td>商品预览</td>
             <td>相册</td>
             <td>修改</td>
             <td>删除</td>
@@ -50,7 +51,11 @@ use yii\helpers\Url;
                 <td><?=$model->create_time?></td>
                 <td><?=$model->view_times?></td>
                 <td><?=\yii\bootstrap\Html::
-                    a('相册',['goods/photos','id'=>$model->id],['class'=>'btn btn-info'])?></td>
+                    a('相册',['goods/gallery','id'=>$model->id],['class'=>'btn btn-info'])?>
+                </td>
+                <td><?=\yii\bootstrap\Html::
+                    a('商品预览',['goods/view','id'=>$model->id],['class'=>'btn btn-info'])?>
+                </td>
                 <td><?=\yii\bootstrap\Html::
                     a('查看',['goods/details','id'=>$model->id],['class'=>'btn btn-info'])?>
                 </td>

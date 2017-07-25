@@ -1,6 +1,8 @@
 <?php
 namespace backend\models;
 use yii;
+use yii\bootstrap\Html;
+use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 
 class Goods extends yii\db\ActiveRecord implements yii\web\IdentityInterface{
@@ -61,6 +63,10 @@ class Goods extends yii\db\ActiveRecord implements yii\web\IdentityInterface{
 
         ];
     }
+    public function getGalleries()
+    {
+        return $this->hasMany(GoodsGallery::className(),['goods_id'=>'id']);
+    }
     public function getGoodsIntro(){
       return $this->hasOne(GoodsIntro::className(),['goods_id'=>'id']);
     }
@@ -69,5 +75,13 @@ class Goods extends yii\db\ActiveRecord implements yii\web\IdentityInterface{
     }
     public function getGoodsCategory(){
         return $this->hasOne(GoodsCategory::className(),['id'=>'goods_category_id']);
+    }
+    public function getPics()
+    {
+        $images = [];
+        foreach ($this->galleries as $img){
+            $images[] = Html::img($img->path);
+        }
+        return $images;
     }
 }

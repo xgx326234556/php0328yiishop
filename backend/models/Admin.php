@@ -5,7 +5,8 @@ use yii\web\IdentityInterface;
 
 class Admin extends yii\db\ActiveRecord implements IdentityInterface{
 
-
+    public $password;
+    const SCENARIO_ADD='add';
     public static function findIdentity($id)
     {
         return self::findOne(['id' => $id]);
@@ -36,15 +37,16 @@ class Admin extends yii\db\ActiveRecord implements IdentityInterface{
     public function rules()
     {
         return [
-            [['username','password_hash',
-                'email'],'required'],
+            [['username', 'email'],'required'],
+            ['password','required','on'=>self::SCENARIO_ADD],
+            ['email','email'],
         ];
     }
     public function attributeLabels()
     {
         return [
           'username'=>'用户名',
-            'password_hash'=>'密码',
+            'password'=>'密码',
             'email'=>'邮箱',
 
         ];

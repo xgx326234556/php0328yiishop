@@ -10,12 +10,12 @@ class AdminController extends Controller
 {
     public function actionAdd()
     {
-        $model = new Admin();
+        $model = new Admin(['scenario'=>Admin::SCENARIO_ADD]);
         $request = new Request();
         if ($request->isPost) {
             $model->load($request->post());
             if ($model->validate()) {
-                $model->password_hash = \Yii::$app->security->generatePasswordHash($model->password_hash);
+                $model->password_hash = \Yii::$app->security->generatePasswordHash($model->password);
                 $model->created_at = time();
                 $model->status = 1;
                 $model->save();
@@ -52,7 +52,10 @@ class AdminController extends Controller
         if ($request->isPost) {
             $model->load($request->post());
             if ($model->validate()) {
-                $model->password_hash = \Yii::$app->security->generatePasswordHash($model->password_hash);
+                if($model->password){
+                    $model->password_hash = \Yii::$app->security->generatePasswordHash($model->password);
+                }
+
                 $model->updated_at = time();
                 //$model->status=1;
                 $model->save();
@@ -103,5 +106,10 @@ class AdminController extends Controller
         // 判断当前用户是否是游客（未认证的）
         $isGuest = \Yii::$app->user->isGuest;
         var_dump($isGuest);
+    }
+    public function actionLogout()
+    {
+        \Yii::$app->user->logout();
+        return $this->redirect(['admin/login']);
     }
 }
