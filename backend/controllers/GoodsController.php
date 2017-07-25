@@ -59,7 +59,7 @@ class GoodsController extends Controller{
           if($models->validate()){
               $models->goods_id=$model->id;
               $models->save();
-              \Yii::$app->session->setFlash('success','添加相册哦亲');
+              \Yii::$app->session->setFlash('success','添加相册了哦亲');
               return $this->redirect(['goods/gallery','id'=>$model->id]);
           }
 
