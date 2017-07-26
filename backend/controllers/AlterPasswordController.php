@@ -26,6 +26,8 @@ class AlterPasswordController extends Controller{
                   //验证旧密码是否正确
                   if (!\Yii::$app->security->validatePassword($model->old_password, $models->password_hash)){
                       $model->addError('old_password', '旧密码错误');
+                  }elseif($model->new_password==$model->old_password){
+                      $model->addError('new_password', '新旧密码不能一样');
                   }elseif ($model->new_password!==$model->again_new_password) {
                       $model->addError('again_new_password', '两次密码必须一致');
                   }else{
