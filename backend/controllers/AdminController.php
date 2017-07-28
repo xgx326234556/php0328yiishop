@@ -19,10 +19,21 @@ class AdminController extends Controller
                 $model->created_at = time();
                 $model->status = 1;
                 $model->save();
+
+                if(is_array($model->role)){
+                    $authManager=Yii::$app->authManager;
+                    foreach ($model->role as $roleName){
+                        $role=$authManager->getRole($roleName);
+                        if($role){
+                            $authManager->assign($role,$model->id);
+                        }
+                    }
+                }
                 \Yii::$app->session->setFlash('success', '添加成功哦亲');
                 return $this->redirect(['admin/index']);
             }
         }
+
         return $this->render('add', ['model' => $model]);
     }
 
@@ -47,6 +58,9 @@ class AdminController extends Controller
 
     public function actionEdit($id)
     {
+        $authManager=Yii::$app->authManager;
+        //根据id找到需要回显的角色数据
+        $roles=$authManager->getRolesByUser($id);
         $model = Admin::findOne(['id' => $id]);
         $request = new Request();
         if ($request->isPost) {
@@ -59,18 +73,41 @@ class AdminController extends Controller
                 $model->updated_at = time();
                 //$model->status=1;
                 $model->save();
+                //取消绑定
+                if(is_array($roles)){
+                    foreach ($roles as $v){
+                        $authManager->revoke($v,$id);
+                    }
+                }
+                if(is_array($model->role)){
+                    foreach ($model->role as $roleName){
+                        $role=$authManager->getRole($roleName);
+                        if($role){
+                            $authManager->assign($role,$model->id);
+                        }
+                    }
+                }
                 \Yii::$app->session->setFlash('success', '修改成功哦亲');
                 return $this->redirect(['admin/index']);
             }
         }
+        //回显数据
+        $model->role=yii\helpers\ArrayHelper::map($roles,'name','name');
         return $this->render('add', ['model' => $model]);
     }
 
     public function actionDelete($id)
     {
+        $authManager=Yii::$app->authManager;
+        $roles=$authManager->getRolesByUser($id);
         $model = Admin::findOne(['id' => $id]);
         $model->status = 0;
         $model->save();
+        if(is_array($roles)){
+            foreach ($roles as $v){
+                $authManager->revoke($v,$id);
+            }
+        }
         \Yii::$app->session->setFlash('success', '删除哦亲');
         return $this->redirect(['admin/index']);
     }
