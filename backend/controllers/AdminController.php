@@ -1,5 +1,6 @@
 <?php
 namespace backend\controllers;
+use backend\filters\RbacFilters;
 use backend\models\Admin;
 use yii\web\Controller;
 use yii\web\Request;
@@ -149,4 +150,15 @@ class AdminController extends Controller
         \Yii::$app->user->logout();
         return $this->redirect(['admin/login']);
     }
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilters::className(),
+                'only'=>['add','edit','delete','index'],
+
+            ]
+        ];
+    }
+
 }

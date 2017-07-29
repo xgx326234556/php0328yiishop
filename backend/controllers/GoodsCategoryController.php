@@ -1,5 +1,6 @@
 <?php
 namespace  backend\controllers;
+use backend\filters\RbacFilters;
 use backend\models\GoodsCategory;
 use yii\web\HttpException;
 use yii\web\Controller;
@@ -137,5 +138,13 @@ class GoodsCategoryController extends Controller{
       //}
 
 
+  }
+  public function behaviors()
+  {
+      return [
+        'rbac'=>[
+            'class'=>RbacFilters::className(),
+        ]
+      ];
   }
 }

@@ -27,11 +27,11 @@ use yii\helpers\Url;
             <td>排序</td>
             <td>添加时间</td>
             <td>点击数</td>
-            <td>查看详情</td>
-            <td>商品预览</td>
             <td>相册</td>
-            <td>修改</td>
-            <td>删除</td>
+            <td>商品预览</td>
+            <td>查看详情</td>
+            <td>操作</td>
+
         </tr>
         <?php foreach($models as $model) :?>
             <tr>
@@ -58,14 +58,22 @@ use yii\helpers\Url;
                 </td>
                 <td><?=\yii\bootstrap\Html::
                     a('查看',['goods/details','id'=>$model->id],['class'=>'btn btn-info'])?>
-                </td>
                 <td>
-                    <?=\yii\bootstrap\Html::
-                    a('修改',['goods/edit','id'=>$model->id],['class'=>'btn btn-info'])?>
-                </td>
-                <td>
-                    <?=\yii\bootstrap\Html::
-                    a('删除',['goods/delete','id'=>$model->id],['class'=>'btn btn-info'])?>
+                <?php
+                if(Yii::$app->user->can('goods/edit')){?>
+
+                        <?=\yii\bootstrap\Html::
+                        a('修改',['goods/edit','id'=>$model->id],['class'=>'btn btn-info'])?>
+
+                <?php }?>
+                <?php
+                if(Yii::$app->user->can('goods/delete')){?>
+
+                        <?=\yii\bootstrap\Html::
+                        a('删除',['goods/delete','id'=>$model->id],['class'=>'btn btn-info'])?>
+
+
+                <?php }?>
                 </td>
             </tr>
         <?php endforeach;?>

@@ -15,6 +15,8 @@ use yii\helpers\Url;
         <td>排序</td>
         <td>状态</td>
         <td>操作</td>
+
+
     </tr>
     <?php foreach($models as $model) :?>
       <tr>
@@ -24,13 +26,24 @@ use yii\helpers\Url;
 <td><?=\yii\bootstrap\Html::img($model->logo,['height'=>50])?></td>
 <td><?=$model->sort?></td>
 <td><?=\backend\models\Brand::getStatusOptions(false)[$model->status]?></td>
-<td>
-    <?=\yii\bootstrap\Html::
-    a('修改',['brand/edit','id'=>$model->id],['class'=>'btn btn-info'])?>
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    <?=\yii\bootstrap\Html::
-    a('删除',['brand/delete','id'=>$model->id],['class'=>'btn btn-info'])?>
-</td>
+          <td>
+          <?php
+
+          if(Yii::$app->user->can('brand/edit')){?>
+
+                  <?=\yii\bootstrap\Html::
+                  a('修改',['brand/edit','id'=>$model->id],['class'=>'btn btn-info'])?>
+
+          <?php }?>
+          <?php
+          if(Yii::$app->user->can('brand/delete')){?>
+
+                  <?=\yii\bootstrap\Html::
+                  a('删除',['brand/delete','id'=>$model->id],['class'=>'btn btn-info'])?>
+
+
+          <?php }?>
+          </td>
 </tr>
 <?php endforeach;?>
 </table>

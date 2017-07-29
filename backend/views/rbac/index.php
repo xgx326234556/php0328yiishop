@@ -16,8 +16,21 @@ use yii\helpers\Url;
                 <td><?=$model->name?></td>
                 <td><?=$model->description?></td>
                 <td>
-                    <?=\yii\bootstrap\Html::a('修改',['rbac/edit','name'=>$model->name],['class'=>'btn btn-info'])?>
-                    <?=\yii\bootstrap\Html::a('删除',['rbac/delete','name'=>$model->name],['class'=>'btn btn-info'])?>
+                <?php
+                if(Yii::$app->user->can('rbac/edit')){?>
+
+                    <?=\yii\bootstrap\Html::
+                    a('修改',['rbac/edit','name'=>$model->name],['class'=>'btn btn-info'])?>
+
+                <?php }?>
+                <?php
+                if(Yii::$app->user->can('rbac/delete')){?>
+
+                    <?=\yii\bootstrap\Html::
+                    a('删除',['rbac/delete','name'=>$model->name],['class'=>'btn btn-info'])?>
+
+
+                <?php }?>
                 </td>
             </tr>
         <?php endforeach;?>

@@ -25,11 +25,21 @@ use yii\helpers\Url;
             <td><?=$model->sort?></td>
             <td><?=\backend\models\ArticleCategory::getArticleCategoryOptions(false)[$model->status]?></td>
             <td>
-                <?=\yii\bootstrap\Html::
-                a('修改',['article-category/edit','id'=>$model->id],['class'=>'btn btn-info'])?>
-                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                <?=\yii\bootstrap\Html::
-                a('删除',['article-category/delete','id'=>$model->id],['class'=>'btn btn-info'])?>
+                <?php
+                if(Yii::$app->user->can('article-category/edit')){?>
+
+                    <?=\yii\bootstrap\Html::
+                    a('修改',['article-category/edit','id'=>$model->id],['class'=>'btn btn-info'])?>
+
+                <?php }?>
+                <?php
+                if(Yii::$app->user->can('article-category/delete')){?>
+
+                    <?=\yii\bootstrap\Html::
+                    a('删除',['article-category/delete','id'=>$model->id],['class'=>'btn btn-info'])?>
+
+
+                <?php }?>
             </td>
         </tr>
     <?php endforeach;?>

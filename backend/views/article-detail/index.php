@@ -14,11 +14,21 @@ use yii\helpers\Url;
                 <td><?=$model->article->name?></td>
                 <td><?=$model->content?></td>
                 <td>
-                    <?=\yii\bootstrap\Html::
-                    a('修改',['article-detail/edit','id'=>$model->article_id],['class'=>'btn btn-info'])?>
-                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                    <?=\yii\bootstrap\Html::
-                    a('删除',['article-detail/delete','id'=>$model->article_id],['class'=>'btn btn-info'])?>
+                    <?php
+                    if(Yii::$app->user->can('article-detail/edit')){?>
+
+                        <?=\yii\bootstrap\Html::
+                        a('修改',['article-detail/edit','id'=>$model->id],['class'=>'btn btn-info'])?>
+
+                    <?php }?>
+                    <?php
+                    if(Yii::$app->user->can('article-detail/delete')){?>
+
+                        <?=\yii\bootstrap\Html::
+                        a('删除',['article-detail/delete','id'=>$model->id],['class'=>'btn btn-info'])?>
+
+
+                    <?php }?>
                 </td>
             </tr>
         <?php endforeach;?>

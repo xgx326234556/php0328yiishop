@@ -1,5 +1,6 @@
 <?php
 namespace backend\controllers;
+use backend\filters\RbacFilters;
 use backend\models\Brand;
 use flyok666\uploadifive\UploadAction;
 use yii\data\Pagination;
@@ -154,6 +155,15 @@ class BrandController extends Controller{
                     $action->output['fileUrl']=$url;
                 },
             ],
+        ];
+    }
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilters::className(),
+                 'only'=>['add','edit','delete','index'],
+            ]
         ];
     }
 

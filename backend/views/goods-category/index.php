@@ -21,11 +21,21 @@ use yii\helpers\Url;
                 <td><?=\backend\models\GoodsCategory::getcategory($model->parent_id)?></td>
                 <td><?=$model->intro?></td>
                 <td>
-                    <?=\yii\bootstrap\Html::
-                    a('修改',['goods-category/edit','id'=>$model->id],['class'=>'btn btn-info'])?>
-                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                    <?=\yii\bootstrap\Html::
-                    a('删除',['goods-category/delete','id'=>$model->id],['class'=>'btn btn-info'])?>
+                    <?php
+                    if(Yii::$app->user->can('goods-category/edit')){?>
+
+                        <?=\yii\bootstrap\Html::
+                        a('修改',['goods-category/edit','id'=>$model->id],['class'=>'btn btn-info'])?>
+
+                    <?php }?>
+                    <?php
+                    if(Yii::$app->user->can('goods-category/delete')){?>
+
+                        <?=\yii\bootstrap\Html::
+                        a('删除',['goods-category/delete','id'=>$model->id],['class'=>'btn btn-info'])?>
+
+
+                    <?php }?>
                 </td>
             </tr>
         <?php endforeach;?>

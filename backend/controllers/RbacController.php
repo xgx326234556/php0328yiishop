@@ -1,5 +1,6 @@
 <?php
 namespace backend\controllers;
+use backend\filters\RbacFilters;
 use backend\models\PermissionForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -74,5 +75,13 @@ class RbacController extends Controller{
      \Yii::$app->session->setFlash('success','删除成功');
      return $this->redirect(['rbac/index']);
 
+ }
+ public function behaviors()
+ {
+     return [
+       'rbac'=>[
+           'class'=>RbacFilters::className(),
+       ]
+     ];
  }
 }

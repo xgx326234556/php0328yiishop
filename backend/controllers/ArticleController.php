@@ -7,6 +7,7 @@ use backend\models\ArticleDetail;
 use yii\data\Pagination;
 use yii\web\Controller;
 use yii\web\Request;
+use backend\filters\RbacFilters;
 
 class ArticleController extends Controller{
  public function actionAdd(){
@@ -118,5 +119,13 @@ class ArticleController extends Controller{
         $models=$query->limit($pager->limit)->offset($pager->offset)->orderBy('sort desc')->all();
         return $this->render('recovery',['models'=>$models,'pager'=>$pager]);
 
+    }
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilters::className(),
+            ]
+        ];
     }
 }

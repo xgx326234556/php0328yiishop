@@ -1,5 +1,6 @@
 <?php
 namespace backend\controllers;
+use backend\filters\RbacFilters;
 use backend\models\Brand;
 use backend\models\Goods;
 use backend\models\GoodsGallery;
@@ -254,6 +255,16 @@ class GoodsController extends Controller{
         }
         return $this->render('view',['model'=>$model]);
 
+    }
+    public function behaviors()
+    {
+        return [
+          'rbac'=>[
+              'class'=>RbacFilters::className(),
+              'only'=>['add','edit','delete','index'],
+
+          ]
+        ];
     }
 
 }

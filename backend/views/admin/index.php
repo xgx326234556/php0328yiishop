@@ -31,12 +31,22 @@ use yii\helpers\Url;
             <td><?=date('Y-m-d',$model->last_login_time)?></td>
             <td><?=$model->last_login_ip?></td>
             <td>
+            <?php
+
+            if(Yii::$app->user->can('admin/edit')){?>
+
                 <?=\yii\bootstrap\Html::
                 a('修改',['admin/edit','id'=>$model->id],['class'=>'btn btn-info'])?>
-                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+
+            <?php }?>
+            <?php
+            if(Yii::$app->user->can('admin/delete')){?>
+
                 <?=\yii\bootstrap\Html::
                 a('删除',['admin/delete','id'=>$model->id],['class'=>'btn btn-info'])?>
 
+
+            <?php }?>
             </td>
         </tr>
     <?php endforeach;?>

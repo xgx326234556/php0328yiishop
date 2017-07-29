@@ -33,13 +33,23 @@ use yii\helpers\Url;
                 <td><?=mb_substr($model->articleDetail->content,0,8).'.....'?></td>
                 <td><?=\yii\bootstrap\Html::a('查看',['article/kan','id'=>$model->id],['class'=>'btn btn-info'])?></td>
                 <td>
+                <?php
+                if(Yii::$app->user->can('article/edit')){?>
+
                     <?=\yii\bootstrap\Html::
                     a('修改',['article/edit','id'=>$model->id],['class'=>'btn btn-info'])?>
-                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                    <?=\yii\bootstrap\Html::
-                    a('删除',['article/delete','id'=>$model->id],['class'=>'btn btn-info'])?>
 
+                <?php }?>
+                <?php
+                if(Yii::$app->user->can('article/delete')){?>
+
+                        <?=\yii\bootstrap\Html::
+                        a('删除',['article/delete','id'=>$model->id],['class'=>'btn btn-info'])?>
+
+
+                <?php }?>
                 </td>
+
             </tr>
         <?php endforeach;?>
     </table>
