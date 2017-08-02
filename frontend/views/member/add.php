@@ -78,11 +78,13 @@
                         <!--<label for="">手机号码：</label>
                         <input type="text" class="txt" value="" name="Member[tel]" id="tel" placeholder=""/>-->
                         <?php echo $form->field($model,'tel')->textInput(['class'=>'txt'])?>
+                        <p id="box"></p>
                     </li>
                     <li>
-                        <label for="">验证码：</label>
+                        <!--<label for="">验证码：</label>
                         <input type="text" class="txt" value="" placeholder="请输入短信验证码" name="Member[captcha]" disabled="disabled" id="captcha"/> <input type="button" onclick="bindPhoneNum(this)" id="get_captcha" value="获取验证码" style="height: 25px;padding:3px 8px"/>
-
+-->
+                        <?php echo $form->field($model,'duan')->textInput(['class'=>'txt'])?><input type="button" onclick="bindPhoneNum(this)" id="get_captcha" value="获取验证码" style="height: 25px;padding:3px 8px"/>
 
 
                     </li>
@@ -171,6 +173,30 @@
     }
     $('#w1').remove();
     $('body div :first').removeAttr('class');
+      var telphon='';
+    $('#member-tel').blur(function () {
+        $('#member-tel').val();
+        telphon=$('#member-tel').val();
+        console.debug(telphon);
+    });
+
+
+         $('#get_captcha').click(function () {
+             var reg=/^1[3-8]{1}\d{9}$/;
+             if(reg.test(telphon)){
+                 var url="/member/duan";
+                 var row='teel='+telphon;
+                 $.getJSON(url,row,function () {
+
+                 })
+             }else {
+                $('#box').text('手机号错误');
+             }
+
+         })
+
+
+
 </script>
 </body>
 </html>

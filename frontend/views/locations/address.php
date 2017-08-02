@@ -505,10 +505,8 @@
             if(!empty($modelx->name)){
                 //获取id值在传地址时使用
                 $id=$modelx->id;
-                //post请求提交修改也页面
              $form=\yii\widgets\ActiveForm::begin(['method'=>'post','action'=>'path-edit?id='.$id]);
             }else{
-                //post提交添加页面
             $form=\yii\widgets\ActiveForm::begin(['method'=>'post','action'=>'path-add']);
             }
             ?>

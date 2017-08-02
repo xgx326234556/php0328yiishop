@@ -44,6 +44,18 @@ return [
             'rules' => [
             ],
         ],
+        'sms'=>[
+            //加载一个类
+            'class'=>\frontend\components\AliyunSms::className(),
+            //密钥AK
+            'accessKeyId'=>'LTAIruYIqy1lWmZ3',
+            //密钥SK
+            'accessKeySecret'=>'9abinkzPCypamgSuDzi7ciQMPWlmiY',
+            //网站签名
+            'signName'=>'正品火锅',
+            //短信模板
+            'templateCode'=>'SMS_80185053'
+        ],
 
     ],
     'params' => $params,

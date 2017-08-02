@@ -17,7 +17,7 @@ class LoginController extends Controller{
           if ($model->validate() && $model->login()) {
               //输出登录成功
               \yii::$app->session->setFlash('success', '登录成功');
-              return $this->redirect(['admin/index']);
+              return $this->redirect(['index/index']);
           }
       }
       return $this->render('add',['model'=>$model]);
@@ -46,6 +46,11 @@ class LoginController extends Controller{
         // 判断当前用户是否是游客（未认证的）
         $isGuest = \Yii::$app->user->isGuest;
         var_dump($isGuest);
+    }
+    public function actionLogout()
+    {
+        \Yii::$app->user->logout();
+        return $this->redirect(['login/login']);
     }
 
 }

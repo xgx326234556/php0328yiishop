@@ -16,9 +16,19 @@ class MemberController extends Controller{
       if($request->isPost){
        $model->load($request->post());
        if($model->validate()){
+           $tel=$model->tel;
            $model->create_time=time();
            $model->password_hash=\Yii::$app->security->generatePasswordHash($model->password);
-           $model->save(false);
+           $code2 = \Yii::$app->session->get('code_'.$tel);
+           $pthon=$model->duan;
+           if($pthon==$code2){
+               $model->save(false);
+
+           }else{
+               $model->addError('duan','短息验证码错误');
+
+           }
+
        }
 
       }
@@ -33,6 +43,15 @@ class MemberController extends Controller{
                 'maxLength'=>3,
             ]
         ];
+    }
+    public function actionDuan($teel){
+        $code = rand(1000,9999);
+        $tel = $teel;
+        $res = \Yii::$app->sms->setPhoneNumbers($tel)->setTemplateParam(['code'=>$code])->send();
+        //将短信验证码保存redis（session，mysql）
+        \Yii::$app->session->set('code_'.$tel,$code);
+        //验证
+
     }
 
 }

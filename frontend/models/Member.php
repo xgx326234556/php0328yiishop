@@ -6,6 +6,7 @@ use yii\web\IdentityInterface;
 class Member extends ActiveRecord implements IdentityInterface{
     public $password;
     public $re_password;
+    public $duan;
     public $code;
 
 
@@ -42,8 +43,10 @@ class Member extends ActiveRecord implements IdentityInterface{
         return [
           [['username','password','tel','email','re_password'],'required'],
           ['email','email'],
+            ['username','unique'],
           ['re_password','compare','compareAttribute'=>'password'],
-            ['code','captcha','captchaAction'=>'member/captcha']
+            ['code','captcha','captchaAction'=>'member/captcha'],
+            ['duan','required'],
         ];
     }
     public function attributeLabels()
@@ -55,6 +58,7 @@ class Member extends ActiveRecord implements IdentityInterface{
             'email'=>'邮箱',
             're_password'=>'确认密码',
             'code'=>'验证码',
+            'duan'=>'短信验证',
 
         ];
     }
