@@ -514,7 +514,7 @@
             <div class="preview fl">
                 <div class="midpic">
                     <a href="http://admin.yiishop.com/<?=$good->logo?>" class="jqzoom" rel="gal1">   <!-- 第一幅图片的大图 class 和 rel属性不能更改 -->
-                        <img src="http://admin.yiishop.com/<?=$good->logo?>" alt="" />               <!-- 第一幅图片的中图 -->
+                        <img src="http://admin.yiishop.com/<?=$good->logo?>" alt="" width="352"/>               <!-- 第一幅图片的中图 -->
                     </a>
                 </div>
 

@@ -113,21 +113,22 @@ class IndexController extends Controller
             ]);
             $cookies->add($cookie);
         } else {
-            $model = new Cart();
-            $member_id = \Yii::$app->user->identity->getId();
-            $models = Cart::find()
+              $model = new Cart();
+               $member_id = \Yii::$app->user->identity->getId();
+               $models = Cart::find()
                 ->andWhere(['member_id'=>$member_id])
                 ->andWhere(['goods_id'=>$goods_id])
                 ->one();
-            if (!$models) {
-                $model->amount = $amount;
-                $model->goods_id = $goods_id;
-                $model->member_id = $member_id;
-                $model->save(false);
-            } else {
-                $models->amount += $amount;
-                $models->save();
-            }
+                   if (!$models) {
+                       $model->amount = $amount;
+                       $model->goods_id = $goods_id;
+                       $model->member_id = $member_id;
+                       $model->save(false);
+                   } else {
+                       $models->amount += $amount;
+                       $models->save();
+                   }
+
         }
 
         return $this->redirect(['index/cart']);

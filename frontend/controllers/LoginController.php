@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 use Codeception\Module\Yii1;
+use frontend\models\Cart;
 use frontend\models\LoginForm;
 use frontend\models\Member;
 use yii\captcha\CaptchaAction;
@@ -9,13 +10,40 @@ use yii\web\Request;
 
 class LoginController extends Controller{
     //public $layout=false;
-  public function actionLogin(){
-      $model=new LoginForm();
+  public function actionLogin()
+  {
+      $model = new LoginForm();
       $rquest = new Request();
       if ($rquest->isPost) {
           $model->load($rquest->post());
           if ($model->validate() && $model->login()) {
               //输出登录成功
+              $member_id = \Yii::$app->user->identity->getId();
+              $cookies = \Yii::$app->request->cookies;
+              $carts = unserialize($cookies->get('goods'));
+              if ($carts) {
+
+                  foreach (array_keys($carts) as $v) {
+                      $model = new Cart();
+                      $models = Cart::find()
+                          ->andWhere(['member_id' => $member_id])
+                          ->andWhere(['goods_id' => $v])
+                          ->one();
+                      if (!$models) {
+                          $model->amount = $carts[$v];
+                          $model->goods_id = $v;
+                          $model->member_id = $member_id;
+                          $model->save(false);
+                      } else {
+                          $models->amount += $carts[$v];
+                          $models->save();
+                      }
+
+                  }
+                  \Yii::$app->response->cookies->remove('goods');
+              }
+
+
               \yii::$app->session->setFlash('success', '登录成功');
               return $this->redirect(['index/index']);
           }
