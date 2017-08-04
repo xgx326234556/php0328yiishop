@@ -18,6 +18,7 @@ return [
         ],
         'user' => [
             'identityClass' =>\frontend\models\Member::className(),
+            'loginUrl' => ['login/login'],
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
         ],

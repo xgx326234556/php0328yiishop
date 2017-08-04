@@ -23,6 +23,7 @@ class MemberController extends Controller{
            $pthon=$model->duan;
            if($pthon==$code2){
                $model->save(false);
+               return $this->redirect(['login/login']);
 
            }else{
                $model->addError('duan','短息验证码错误');

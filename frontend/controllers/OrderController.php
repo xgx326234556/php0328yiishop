@@ -6,6 +6,7 @@ use frontend\models\Order;
 use frontend\models\OrderGoods;
 use frontend\models\Path;
 use yii\db\Exception;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 
 class OrderController extends Controller{
@@ -36,7 +37,6 @@ class OrderController extends Controller{
 }
 public function actionAddOrder(){
         //接收post数据
-
     $member_id=\Yii::$app->user->identity->getId();
     $data=\Yii::$app->request->post();
     $zje=isset($data['zje'])?$data['zje']:0;
@@ -126,7 +126,7 @@ public function actionAddOrder(){
             $ramove_cart=Cart::findOne(['id'=>$delete->id]);
             $ramove_cart->delete();
         }*/
-        return $this->redirect(['order/order-index']);
+        return $this->redirect(['order/flow3']);
 
     }else{
         return $this->redirect(['order/flow']);
@@ -143,6 +143,27 @@ public function actionDelete($id){
     $model->delete();
     $model1->delete();
     return $this->redirect(['order/order-index']);
+}
+public function actionFlow3(){
+    return $this->render('flow3');
+}
+public function behaviors()
+{
+    return [
+        'ACF'=>[
+            'class'=>AccessControl::className(),
+            'only'=>['flow','add-order','order-index','delete','flow3'],//哪些操作需要使用该过滤器
+            'rules'=>[
+                [
+                    'allow'=>true,//是否允许
+                    'actions'=>['flow','add-order','order-index','delete','flow3'],//指定操作
+                    'roles'=>['@'],//指定角色 ?表示未认证用户(未登录) @表示已认证用户(已登录)
+                ],
+
+            ]
+        ]
+
+    ];
 }
 
 }
