@@ -109,22 +109,23 @@ public function actionAddOrder(){
                     $model1->save();
                     $stock->stock=$stock->stock-$model1->amount;
                     $stock->save(false);
+                    $carts->delete();
                     $transaction->commit();
                 }else{
-                    \Yii::$app->session->setFlash('success','商品数量不够');
-                    return $this->redirect(['order/flow']);
+                    throw new Exception('商品库存不足，无法继续下单，请修改购物车商品数量');
                 }
             }catch (Exception $e){
                 $transaction->rollBack();
+
             }
 
 
         }
-        $gouwuche=Cart::find()->where(['member_id'=>$member_id])->all();
+       /* $gouwuche=Cart::find()->where(['member_id'=>$member_id])->all();
         foreach ($gouwuche as $delete){
             $ramove_cart=Cart::findOne(['id'=>$delete->id]);
             $ramove_cart->delete();
-        }
+        }*/
         return $this->redirect(['order/order-index']);
 
     }else{
